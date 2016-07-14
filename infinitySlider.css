@@ -2,3 +2,25 @@
 * infinity slider
 * Author: yehuda yadid
 */
+
+.infinity-slider {
+    overflow: hidden;
+}
+
+.infinity-slider-container {
+    width: 100%;
+}
+
+.infinity-slider-slide {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.rtl .infinity-slider-slide{
+    float: right;
+}
+
+.ltr .infinity-slider-slide{
+    float: left;
+}
