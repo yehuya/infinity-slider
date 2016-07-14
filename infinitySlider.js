@@ -28,6 +28,7 @@
         //============ TEST
             this.init();
             this.width();
+            this.speed();
         //============ TEST
     }
 
@@ -123,6 +124,16 @@
             var slide = childern[i];
             slide.style.width = width + '%';
         }
+    }
+
+    /**
+     * slider speed
+     */
+    Slider.prototype.speed = function(){
+       var transition = ['transition', 'webkitTransition', 'MozTransition'];
+       for(var i = 0 ; i < transition.length ; i++){
+           this.container.style[transition[i]] = this.options.speed + 'ms';
+       }
     }
 
     /**
