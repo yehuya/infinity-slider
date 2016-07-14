@@ -1,18 +1,30 @@
 <html>
     <head>
-
+       <link rel="stylesheet" href="infinitySlider.css">
        <style>
            html, body {width: 100%; height: 100%; padding: 0; margin: 0;}
            body {display: table;}
-           .testSlider {display: table-cell; width: 30%; height: 100px; text-align: center; vertical-align: middle;background: #efefef;}
-           .theSlider {width: 30%; height: 100px;}
+           .testSlider {display: table-cell; vertical-align: middle; text-align: center;}
+           .theSlider {width: 300px; height: 300px; background: #efefef; margin: 0 auto;}
+           .thisSlide {width: 300px; height: 300px; background: black;border: 2px solid red; box-sizing: border-box;}
        </style>
     </head>
     <body>
         <div class="testSlider">
-            <div class="theSlider">
-                
+            <div class="theSlider" id="slider">
+                <div class="thisSlide">
+                    <span></span>
+                </div>
+                <div class="thisSlide"></div>
+                <div class="thisSlide"></div>
+                <div class="thisSlide"></div>
+                <div class="thisSlide"></div>
             </div>
         </div>
+       <script src="infinitySlider.js"></script>
+      <script>
+          var elem = document.getElementById('slider');
+          elem.Slider();
+      </script>
     </body>
 </html>
