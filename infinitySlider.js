@@ -29,6 +29,7 @@
             this.init();
             this.width();
             this.speed();
+            this.arrow();
         //============ TEST
     }
 
@@ -37,6 +38,7 @@
      */
     Slider.prototype.options = {
         dot: true,
+        arrow: true,
         loop: false,
         infinity: true,
         speed: 500,
@@ -45,7 +47,12 @@
             root: 'infinity-slider',
             slides: 'infinity-slider-slide',
             dot: 'infinity-slider-dot',
-            container: 'infinity-slider-container'
+            container: 'infinity-slider-container',
+            arrow: {
+                root: 'infinity-slider-arrow',
+                left: 'infinity-slider-a-left',
+                right: 'infinity-slider-a-right', 
+            }
         }
     }
 
@@ -66,8 +73,10 @@
             container.classList.add(options.direction);
 
         // create dot main div
-        var dot = document.createElement('div');
-            dot.classList.add(options.classes.dot);
+        if(options.dot){
+            var dot = document.createElement('div');
+                dot.classList.add(options.classes.dot);
+        }
 
         // clone and append parent child into container
         while(this.element.childNodes.length > 0){
@@ -79,15 +88,19 @@
                 clone.classList.add(this.options.classes.slides);
 
                 // create dot for this slide
-                var span = document.createElement('span');
-                dot.appendChild(span);
+                if(options.dot){
+                    var span = document.createElement('span');
+                    dot.appendChild(span);
+                }
             }
 
             container.appendChild(clone);
         }
 
         this.element.appendChild(container);
-        this.element.appendChild(dot);
+        if(options.dot){
+            this.element.appendChild(dot);
+        }
         this.slides = this.clean(container); // return clean childern (without '#text')
         this.container = container;
     }
@@ -127,13 +140,37 @@
     }
 
     /**
-     * slider speed
+     * set slider speed
+     * - set transition on the container with options.speed param
      */
     Slider.prototype.speed = function(){
        var transition = ['transition', 'webkitTransition', 'MozTransition'];
        for(var i = 0 ; i < transition.length ; i++){
            this.container.style[transition[i]] = this.options.speed + 'ms';
        }
+    }
+
+    /**
+     * create arrow
+     */
+    Slider.prototype.arrow = function(){
+        var options = this.options;
+
+        if(options.arrow){
+            var left = document.createElement('div');
+                left.classList.add(options.classes.arrow.root);
+                left.classList.add(options.classes.arrow.left);
+
+            var right = document.createElement('div');
+                right.classList.add(options.classes.arrow.root);
+                right.classList.add(options.classes.arrow.right);
+
+            var direction = options.direction;
+            if(direction == 'rtl'){
+                this.element.insertBefore(right, this.container);
+                this.element.insertBefore(left, this.container.nextSibling);
+            }
+        }
     }
 
     /**
