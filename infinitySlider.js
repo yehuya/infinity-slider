@@ -23,17 +23,15 @@
             extend(this.options, options);
         }
         
-        // if loop = true -> infinity = true
-        this.options.loop == true ? this.options.infinity = true : this.options.infinity = this.options.infinity ; 
         this.element = elem;
-        this.interval; // for loop function
+        this.interval; // for loop function (setInterval)
 
         //============ TEST
             this.init();
             this.width();
             this.speed();
-            this.arrow();
             this.loop();
+            this.arrow();
         //============ TEST
     }
 
@@ -157,7 +155,8 @@
 
         // set the container position to second slide
         // for infinity 
-        this.container_transform('translate3d(-' + this.slideWidth * 1 + '%, 0, 0)');
+        var sign = this.options.direction == 'rtl' ? 1 : -1;
+        this.container_transform('translate3d(' + sign * this.slideWidth * 1 + '%, 0, 0)');
     }
 
     /**
@@ -200,7 +199,8 @@
             container.insertBefore(clone, cleanSlides[0]);
         }
 
-        this.container_transform('translate3d(-' + this.slideWidth * 1 + '%, 0, 0)');
+        var sign = this.options.direction == 'rtl' ? 1 : -1;
+        this.container_transform('translate3d(' + sign * this.slideWidth * 1 + '%, 0, 0)');
         
         // add class "active" to the view slide
         var cleanSlidesAfter = this.clean(container);
@@ -250,7 +250,8 @@
                 m = 2
             }
 
-            this.container_transform('translate3d(-' + this.slideWidth * m + '%, 0, 0)');
+            var sign = options.direction == 'rtl' ? 1 : -1;
+            this.container_transform('translate3d(' + sign * this.slideWidth * m + '%, 0, 0)');
 
             setTimeout(function(){
                 for(var i = 0 ; i < transition.length ; i++){
@@ -258,6 +259,11 @@
                 }
  
                 self.infinity(direction);
+                
+                // if slider loop was cancled restart it
+                if(self.interval === true && options.loop === true){
+                    self.loop();
+                }
 
                 self.infinity_timeout = true;
             }, options.speed);
@@ -266,16 +272,12 @@
 
     Slider.prototype.loop = function(){
         var options = this.options;
-        var self = this;
-        var direction;
+        if(options.loop){       
+            var self = this;
+            var direction;
 
-        if(options.direction == 'rtl'){
-            direction = 'left';
-        }else if(options.direction == 'ltr'){
             direction = 'right';
-        }
-
-        if(options.loop){
+       
             this.interval = setInterval(function(){
                 self.move(direction);
             }, options.loop_speed)
@@ -293,11 +295,11 @@
         if(options.arrow){
             var left = document.createElement('div');
                 left.classList.add(options.classes.arrow.root);
-                left.classList.add(options.classes.arrow.left);
+                left.classList.add(options.classes.arrow.left, options.direction);
 
             var right = document.createElement('div');
                 right.classList.add(options.classes.arrow.root);
-                right.classList.add(options.classes.arrow.right);
+                right.classList.add(options.classes.arrow.right, options.direction);
 
             var direction = options.direction;
 
@@ -313,11 +315,18 @@
             this.arrow.left = left;
             this.arrow.right = right;
 
+            var clearLoop = function(){
+                clearInterval(self.interval);
+                self.interval = true;
+            }
+
             left.addEventListener('click', function(){
+                clearLoop();
                 self.move('left');
             });
 
             right.addEventListener('click', function(){
+                clearLoop();
                 self.move('right');
             });
         }
