@@ -5,6 +5,7 @@
 
 .infinity-slider {
     overflow: hidden;
+    position:relative;
 }
 
 .infinity-slider-container {
@@ -24,3 +25,35 @@
 .ltr .infinity-slider-slide{
     float: left;
 }
+
+.infinity-slider-arrow {
+    position: absolute;
+    color: white;
+    font-size: 150%;
+    top: 50%;
+    transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);
+    cursor: pointer;
+    z-index: 9999999;
+}
+
+.infinity-slider-a-left {
+    left: 2%;
+}
+
+.infinity-slider-a-right {
+    right: 2%;
+}
+
+.infinity-slider-a-left:before {
+    content: '<';
+}
+
+.infinity-slider-a-right:before {
+    content: '>';
+}
+
+.infinity-slider-hide {
+    display: none;
+}
+
