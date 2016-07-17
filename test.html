@@ -6,6 +6,7 @@
            .testSlider {display: table-cell; vertical-align: middle; text-align: center;}
            .theSlider {width: 300px; height: 300px; background: #efefef; margin: 0 auto;}
            .thisSlide {width: 300px; height: 300px; background: black;border: 2px solid red; box-sizing: border-box;}
+           .thisSlide span {font-size: 30px;color: white;}
        </style>
        <link rel="stylesheet" href="infinitySlider.css">
     </head>
@@ -13,19 +14,27 @@
         <div class="testSlider">
             <div class="theSlider" id="slider">
                 <div class="thisSlide">
-                    <span></span>
+                    <span>1</span>
                 </div>
-                <div class="thisSlide"></div>
-                <div class="thisSlide"></div>
-                <div class="thisSlide"></div>
-                <div class="thisSlide"></div>
+                <div class="thisSlide">
+                    <span>2</span>
+                </div>
+                <div class="thisSlide">
+                    <span>3</span>
+                </div>
+                <div class="thisSlide">
+                    <span>4</span>
+                </div>
+                <div class="thisSlide">
+                    <span>5</span>
+                </div>
             </div>
         </div>
        <script src="infinitySlider.js"></script>
       <script>
           var go = document.getElementById('slider');
           go.Slider({
-              direction: 'ltr'
+              direction: 'rtl'
           });
       </script>
     </body>
