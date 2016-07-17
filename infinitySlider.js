@@ -26,13 +26,11 @@
         this.element = elem;
         this.interval; // for loop function (setInterval)
 
-        //============ TEST
-            this.init();
-            this.width();
-            this.speed();
-            this.loop();
-            this.arrow();
-        //============ TEST
+        this.init();
+        this.width();
+        this.speed();
+        this.loop();
+        this.arrow();
     }
 
     /**
@@ -315,9 +313,12 @@
             this.arrow.left = left;
             this.arrow.right = right;
 
+            // clear slider loop if exists
             var clearLoop = function(){
-                clearInterval(self.interval);
-                self.interval = true;
+                if(options.loop){
+                    clearInterval(self.interval);
+                    self.interval = true;
+                }
             }
 
             left.addEventListener('click', function(){
@@ -339,9 +340,9 @@
      * @return Object (first object with new params of obeject 2)
      */
     var extend = function(def, set){
-        for(var p in def){
-            if(set.hasOwnProperty(p)){
-                return def[p] = set[p];
+        for(var p in set){
+            if(def.hasOwnProperty(p)){
+                def[p] = set[p];
             }
         }
 
