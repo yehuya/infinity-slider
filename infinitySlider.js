@@ -22,7 +22,9 @@
         if(options){
             extend(this.options, options);
         }
-
+        
+        // if loop = true -> infinity = true
+        this.options.loop == true ? this.options.infinity = true : this.options.infinity = this.options.infinity ; 
         this.element = elem;
 
         //============ TEST
@@ -30,6 +32,7 @@
             this.width();
             this.speed();
             this.arrow();
+            // this.loop();
         //============ TEST
     }
 
@@ -40,8 +43,8 @@
         dot: true,
         arrow: true,
         loop: false,
-        infinity: false,
-        speed: 500,
+        loop_speed: 1000, // the time of setInterval
+        speed: 500, // the time of container transition
         direction: 'rtl',
         classes: {
             root: 'infinity-slider',
@@ -56,6 +59,11 @@
             }
         }
     }
+
+    /**
+     * for infinity setTimeout
+     */
+    Slider.prototype.infinity_timeout = true;
 
     /**
      * current slide in the view
@@ -145,17 +153,63 @@
         }
 
         this.slideWidth = width;
+
+        // set the container position to second slide
+        // for infinity 
+        this.container_transform('translate3d(-' + this.slideWidth * 1 + '%, 0, 0)');
     }
 
     /**
      * set slider speed
      * - set transition on the container with options.speed param
+     * @param Boolean ('true' to remove container transition)
      */
     Slider.prototype.speed = function(){
-       var transition = ['transition', 'webkitTransition', 'mozTransition'];
        for(var i = 0 ; i < transition.length ; i++){
            this.container.style[transition[i]] = this.options.speed + 'ms';
        }
+    }
+
+    /**
+     * set container transform
+     */
+    Slider.prototype.container_transform = function(input){
+        for(var i = 0 ; i < transform.length ; i++){
+            this.container.style[transform[i]] = input;
+        }
+    }
+
+    /**
+     * set infinity
+     */
+    Slider.prototype.infinity = function(direction){
+        var container = this.container;
+        var cleanSlides = this.clean(container);
+   
+        if(direction == 'right'){
+            var child = cleanSlides[0];
+            var clone = child.cloneNode(true);
+            container.removeChild(child);
+            container.appendChild(clone);
+        }else if(direction == 'left'){
+            var length = cleanSlides.length - 1;
+            var child = cleanSlides[length];
+            var clone = child.cloneNode(true);
+            container.removeChild(child);
+            container.insertBefore(clone, cleanSlides[0]);
+        }
+
+        this.container_transform('translate3d(-' + this.slideWidth * 1 + '%, 0, 0)');
+        
+        // add class "active" to the view slide
+        var cleanSlidesAfter = this.clean(container);
+        for(var i = 0 ; i < cleanSlidesAfter.length ; i++){
+            if(i == 1){
+                cleanSlidesAfter[i].classList.add('active');
+            }else{
+                cleanSlidesAfter[i].classList.remove('active');
+            }
+        }
     }
 
     /**
@@ -165,41 +219,49 @@
      */
     Slider.prototype.move = function(direction){
         var options = this.options;
-        var transform = ['transform', 'webkitTransform', 'mozTransform'];
         var slideLength = this.slides.length - 1;
+        var self = this;
 
-        if(options.infinity){
-
-        }else{
-            if(direction == 'left'){
-                this.current++;
-            }else if(direction == 'right'){
-                this.current--;
-            }
-
-            if(this.current < 0){
-                 this.current = 0;
-                 this.arrow.right.classList.add(options.classes.arrow.hide); // hide right arrow
-            }else{
-                if(this.arrow.right.classList.contains(options.classes.arrow.hide)){
-                    this.arrow.right.classList.remove(options.classes.arrow.hide); // show right arrow
-                }
-            }
-
-            if(this.current > slideLength){
-                this.current = slideLength;
-                this.arrow.left.classList.add(options.classes.arrow.hide); // hide left arrow
-            }else{
-                if(this.arrow.left.classList.contains(options.classes.arrow.hide)){
-                    this.arrow.left.classList.remove(options.classes.arrow.hide); // show left arrow
-                }
-            }
-
-            for(var i = 0 ; i < transform.length ; i++){
-                this.container.style[transform[i]] = 'translate3d(-' + this.slideWidth * this.current + '%, 0, 0)';
-            }
+        if(direction == 'left'){
+            this.current++;
+        }else if(direction == 'right'){
+            this.current--;
         }
-    }   
+
+        if(this.infinity_timeout){
+            this.infinity_timeout = false;
+
+            if(this.current <= 0){
+                this.current = slideLength;
+            }
+
+            if(this.current >= slideLength){
+                this.current = 0;
+            }            
+
+            // the movement
+            this.speed();
+
+            var m;
+            if(direction == 'left'){
+                m = 0;
+            }else if(direction == 'right'){
+                m = 2
+            }
+
+            this.container_transform('translate3d(-' + this.slideWidth * m + '%, 0, 0)');
+
+            setTimeout(function(){
+                for(var i = 0 ; i < transition.length ; i++){
+                    self.container.style[transition[i]] = null;
+                }
+
+                self.infinity(direction);
+
+                self.infinity_timeout = true;
+            }, options.speed);
+        }
+    }
 
     /**
      * create arrow
@@ -218,10 +280,6 @@
                 right.classList.add(options.classes.arrow.root);
                 right.classList.add(options.classes.arrow.right);
 
-            if(!options.infinity){
-                right.classList.add(options.classes.arrow.hide); // hide unnecessary arrow 
-            }
-            
             var direction = options.direction;
 
             if(direction == 'rtl'){
@@ -261,4 +319,14 @@
 
         return def;
     }
+
+    /**
+     * all js transition style
+     */
+    var transition = ['transition', 'webkitTransition', 'mozTransition'];
+
+    /**
+     * all js transform style
+     */
+    var transform = ['transform', 'webkitTransform', 'mozTransform'];
 })();
