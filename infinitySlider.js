@@ -40,7 +40,7 @@
         dot: true,
         arrow: true,
         loop: false,
-        infinity: true,
+        infinity: false,
         speed: 500,
         direction: 'rtl',
         classes: {
@@ -51,10 +51,16 @@
             arrow: {
                 root: 'infinity-slider-arrow',
                 left: 'infinity-slider-a-left',
-                right: 'infinity-slider-a-right', 
+                right: 'infinity-slider-a-right',
+                hide: 'infinity-slider-hide'
             }
         }
     }
+
+    /**
+     * current slide in the view
+     */
+    Slider.prototype.current = 0;
 
     /**
      * slider init 
@@ -137,6 +143,8 @@
             var slide = childern[i];
             slide.style.width = width + '%';
         }
+
+        this.slideWidth = width;
     }
 
     /**
@@ -144,17 +152,62 @@
      * - set transition on the container with options.speed param
      */
     Slider.prototype.speed = function(){
-       var transition = ['transition', 'webkitTransition', 'MozTransition'];
+       var transition = ['transition', 'webkitTransition', 'mozTransition'];
        for(var i = 0 ; i < transition.length ; i++){
            this.container.style[transition[i]] = this.options.speed + 'ms';
        }
     }
 
     /**
+     * set slider movement
+     * direction left / right
+     * @param String (direction of movement)
+     */
+    Slider.prototype.move = function(direction){
+        var options = this.options;
+        var transform = ['transform', 'webkitTransform', 'mozTransform'];
+        var slideLength = this.slides.length - 1;
+
+        if(options.infinity){
+
+        }else{
+            if(direction == 'left'){
+                this.current++;
+            }else if(direction == 'right'){
+                this.current--;
+            }
+
+            if(this.current < 0){
+                 this.current = 0;
+                 this.arrow.right.classList.add(options.classes.arrow.hide); // hide right arrow
+            }else{
+                if(this.arrow.right.classList.contains(options.classes.arrow.hide)){
+                    this.arrow.right.classList.remove(options.classes.arrow.hide); // show right arrow
+                }
+            }
+
+            if(this.current > slideLength){
+                this.current = slideLength;
+                this.arrow.left.classList.add(options.classes.arrow.hide); // hide left arrow
+            }else{
+                if(this.arrow.left.classList.contains(options.classes.arrow.hide)){
+                    this.arrow.left.classList.remove(options.classes.arrow.hide); // show left arrow
+                }
+            }
+
+            for(var i = 0 ; i < transform.length ; i++){
+                this.container.style[transform[i]] = 'translate3d(-' + this.slideWidth * this.current + '%, 0, 0)';
+            }
+        }
+    }   
+
+    /**
      * create arrow
+     * add arrow move events
      */
     Slider.prototype.arrow = function(){
         var options = this.options;
+        var self = this;
 
         if(options.arrow){
             var left = document.createElement('div');
@@ -165,11 +218,31 @@
                 right.classList.add(options.classes.arrow.root);
                 right.classList.add(options.classes.arrow.right);
 
+            if(!options.infinity){
+                right.classList.add(options.classes.arrow.hide); // hide unnecessary arrow 
+            }
+            
             var direction = options.direction;
+
             if(direction == 'rtl'){
                 this.element.insertBefore(right, this.container);
                 this.element.insertBefore(left, this.container.nextSibling);
+            }else if(direction == 'ltr'){
+                this.element.insertBefore(left, this.container);
+                this.element.insertBefore(right, this.container.nextSibling);
             }
+
+            this.arrow = {};
+            this.arrow.left = left;
+            this.arrow.right = right;
+
+            left.addEventListener('click', function(){
+                self.move('left');
+            });
+
+            right.addEventListener('click', function(){
+                self.move('right');
+            });
         }
     }
 
