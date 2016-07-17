@@ -28,15 +28,23 @@
     transform: translateY(-50%);
     -webkit-transform: translateY(-50%);
     cursor: pointer;
-    z-index: 9999999;
+    z-index: 2;
 }
 
-.infinity-slider-a-left {
+.infinity-slider-a-left.ltr {
     left: 2%;
 }
 
-.infinity-slider-a-right {
+.infinity-slider-a-right.ltr {
     right: 2%;
+}
+
+.infinity-slider-a-left.rtl {
+    right: 2%;
+}
+
+.infinity-slider-a-right.rtl {
+    left: 2%;
 }
 
 .infinity-slider-a-left:before {
