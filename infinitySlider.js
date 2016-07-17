@@ -26,13 +26,14 @@
         // if loop = true -> infinity = true
         this.options.loop == true ? this.options.infinity = true : this.options.infinity = this.options.infinity ; 
         this.element = elem;
+        this.interval; // for loop function
 
         //============ TEST
             this.init();
             this.width();
             this.speed();
             this.arrow();
-            // this.loop();
+            this.loop();
         //============ TEST
     }
 
@@ -42,8 +43,8 @@
     Slider.prototype.options = {
         dot: true,
         arrow: true,
-        loop: false,
-        loop_speed: 1000, // the time of setInterval
+        loop: true,
+        loop_speed: 2000, // the time of setInterval
         speed: 500, // the time of container transition
         direction: 'rtl',
         classes: {
@@ -255,11 +256,29 @@
                 for(var i = 0 ; i < transition.length ; i++){
                     self.container.style[transition[i]] = null;
                 }
-
+ 
                 self.infinity(direction);
 
                 self.infinity_timeout = true;
             }, options.speed);
+        }
+    }
+
+    Slider.prototype.loop = function(){
+        var options = this.options;
+        var self = this;
+        var direction;
+
+        if(options.direction == 'rtl'){
+            direction = 'left';
+        }else if(options.direction == 'ltr'){
+            direction = 'right';
+        }
+
+        if(options.loop){
+            this.interval = setInterval(function(){
+                self.move(direction);
+            }, options.loop_speed)
         }
     }
 
