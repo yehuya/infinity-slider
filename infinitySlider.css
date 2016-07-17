@@ -10,20 +10,14 @@
 
 .infinity-slider-container {
     width: 100%;
+    font-size: 0;
 }
 
 .infinity-slider-slide {
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-}
-
-.rtl .infinity-slider-slide{
-    float: right;
-}
-
-.ltr .infinity-slider-slide{
-    float: left;
+    display: inline-block;
 }
 
 .infinity-slider-arrow {
@@ -51,9 +45,5 @@
 
 .infinity-slider-a-right:before {
     content: '>';
-}
-
-.infinity-slider-hide {
-    display: none;
 }
 
