@@ -66,7 +66,7 @@
     /**
      * current slide in the view
      */
-    Slider.prototype.current = 0;
+    Slider.prototype.current = 1;
 
     /**
      * slider init 
@@ -88,6 +88,7 @@
         if(options.dot){
             var dot = document.createElement('div');
                 dot.classList.add(options.classes.dot);
+                this.dot = dot;
         }
 
         // clone and append parent child into container
@@ -102,6 +103,8 @@
                 // create dot for this slide
                 if(options.dot){
                     var span = document.createElement('span');
+                    span.style.transition = 'all ' + options.speed + 'ms linear';
+                    span.style.webkitTransition = 'all ' + options.speed + 'ms linear';
                     dot.appendChild(span);
                 }
             }
@@ -112,6 +115,7 @@
         this.element.appendChild(container);
         if(options.dot){
             this.element.appendChild(dot);
+            this.dot.childNodes[this.current].classList.add('active');
         }
         this.slides = this.clean(container); // return clean childern (without '#text')
         this.container = container;
@@ -222,20 +226,20 @@
         var slideLength = this.slides.length - 1;
         var self = this;
 
-        if(direction == 'left'){
-            this.current++;
-        }else if(direction == 'right'){
-            this.current--;
-        }
-
         if(this.infinity_timeout){
             this.infinity_timeout = false;
 
-            if(this.current <= 0){
+            if(direction == 'left'){
+                this.current++;
+            }else if(direction == 'right'){
+                this.current--;
+            }
+
+            if(this.current < 0){
                 this.current = slideLength;
             }
 
-            if(this.current >= slideLength){
+            if(this.current > slideLength){
                 this.current = 0;
             }            
 
@@ -251,6 +255,18 @@
 
             var sign = options.direction == 'rtl' ? 1 : -1;
             this.container_transform('translate3d(' + sign * this.slideWidth * m + '%, 0, 0)');
+
+            // add class to the dot of the slide
+            if(options.dot){
+                var dots = this.dot.childNodes;
+                for(var i = 0 ; i < dots.length ; i++){
+                    if(i == this.current){
+                        dots[i].classList.add('active');
+                    }else{
+                        dots[i].classList.remove('active');
+                    }
+                }
+            }
 
             setTimeout(function(){
                 for(var i = 0 ; i < transition.length ; i++){
