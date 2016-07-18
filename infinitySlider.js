@@ -371,7 +371,6 @@
 
                 var m = (x - pos.x) * 100 / containerWidth;
 
-                
                 var sign = self.options.direction == 'rtl' ? 1 : -1;
                 self.container_transform('translate3d(' + (m + (sign * self.slideWidth)) + '%, 0, 0)');
             }
