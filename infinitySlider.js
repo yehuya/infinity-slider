@@ -1,11 +1,11 @@
 "use strict";
 
-(function(){
-    /**
-     * infinity slider plugin 
-     * Author: yehuda yadid
-     */
+/**
+ * infinity slider plugin 
+ * Author: yehuda yadid
+ */
 
+(function(){
     /**
      * binding dom element with slider
      */
@@ -25,12 +25,12 @@
         
         this.element = elem;
         this.interval; // for loop function (setInterval)
-
         this.init();
         this.width();
         this.speed();
         this.loop();
         this.arrow();
+        this.touch();
     }
 
     /**
@@ -40,6 +40,7 @@
         dot: true,
         arrow: true,
         loop: true,
+        touch: true,
         loop_speed: 2000, // the time of setInterval
         speed: 500, // the time of container transition
         direction: 'rtl',
@@ -330,6 +331,71 @@
                 clearLoop();
                 self.move('right');
             });
+        }
+    }
+
+    /**
+     * touch event - for switch slide
+     * ## this is for mobile but there is desktop browser supported ##   
+     */
+    Slider.prototype.touch = function(){
+        var self = this;
+        if(self.options.touch){
+            var width = parseInt(this.element.style.width);
+            var containerWidth = parseInt(self.container.style.width);
+            var pos = {x: null, y: null}
+            var dir = {x: null, y: null}
+
+            var start = function(event){
+                event.preventDefault();
+
+                pos.x = event.pageX;
+                pos.y = event.pageY;
+
+                if(self.options.loop){
+                    clearInterval(self.interval);
+                    self.interval = true;
+                }
+
+                return pos;
+            }
+
+            var touchmove = function(event){
+                event.preventDefault();
+
+                var x = event.pageX;
+                var y = event.pageY;
+
+                dir.x = x > pos.x ? 'right' : 'left';
+                dir.y = y > pos.y ? 'up' : 'down';
+
+                var m = (x - pos.x) * 100 / containerWidth;
+
+                
+                var sign = self.options.direction == 'rtl' ? 1 : -1;
+                self.container_transform('translate3d(' + (m + (sign * self.slideWidth)) + '%, 0, 0)');
+            }
+
+            var touchend = function(event){
+                event.preventDefault();
+
+                if(dir.x != null){
+                    if(dir.x == 'right'){
+                        self.move('left');
+                    }else if(dir.x == 'left'){
+                        self.move('right');
+                    }
+                }
+
+                pos.x = null;
+                pos.y = null;
+                dir.x = null;
+                dir.y = null;
+            }
+
+            this.container.addEventListener('touchstart', start);
+            this.container.addEventListener('touchmove', touchmove);
+            this.container.addEventListener('touchend', touchend);
         }
     }
 
