@@ -20,6 +20,27 @@
     display: inline-block;
 }
 
+.infinity-slider-dot {
+    position: absolute;
+    bottom: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+}
+
+.infinity-slider-dot span {
+    width: .7em;
+    height: .7em;
+    border-radius: 100%;
+    background: white;
+    display: inline-block;
+    margin: 0 .4em;
+}
+
+.infinity-slider-dot span.active {
+    background: black;
+}
+
 .infinity-slider-arrow {
     position: absolute;
     color: white;
