@@ -35,10 +35,11 @@
     background: white;
     display: inline-block;
     margin: 0 .4em;
+    cursor: pointer;
 }
 
 .infinity-slider-dot span.active {
-    background: black;
+    background: yellow;
 }
 
 .infinity-slider-arrow {
