@@ -30,6 +30,7 @@
         this.speed();
         this.loop();
         this.arrow();
+        this.dot();
         this.touch();
     }
 
@@ -88,7 +89,7 @@
         if(options.dot){
             var dot = document.createElement('div');
                 dot.classList.add(options.classes.dot);
-                this.dot = dot;
+                this.dotContainer = dot;
         }
 
         // clone and append parent child into container
@@ -115,9 +116,10 @@
         this.element.appendChild(container);
         if(options.dot){
             this.element.appendChild(dot);
-            this.dot.childNodes[this.current].classList.add('active');
+            this.dotContainer.childNodes[this.current].classList.add('active');
         }
         this.slides = this.clean(container); // return clean childern (without '#text')
+        this.slides[this.current].classList.add('active');
         this.container = container;
     }
 
@@ -258,7 +260,7 @@
 
             // add class to the dot of the slide
             if(options.dot){
-                var dots = this.dot.childNodes;
+                var dots = this.dotContainer.childNodes;
                 for(var i = 0 ; i < dots.length ; i++){
                     if(i == this.current){
                         dots[i].classList.add('active');
@@ -347,6 +349,46 @@
                 clearLoop();
                 self.move('right');
             });
+        }
+    }
+
+    /**
+     * set dot as link to slides
+     */
+    Slider.prototype.dot = function(){
+        var self = this;
+        if(self.options.dot){
+            var dots = self.dotContainer.childNodes;
+            for(var i = 0 ; i < dots.length ; i++){
+                (function(index){
+                    dots[index].addEventListener('click', function(event){
+                        event.preventDefault();
+                        var now = self.current;
+                        var to = now - index;
+                        var dir;   
+
+                        if(to < 0){
+                            dir = 'left';
+                            to = to * -1;
+                        }else{
+                            dir = 'right';
+                        }
+
+                        for(var t = 0 ; t < to ; t++){
+                            (function(t){
+                                setTimeout(function(){
+                                    if(self.options.loop){
+                                        clearInterval(self.interval);
+                                        self.interval = true;
+                                    }
+
+                                    self.move(dir);
+                                }, self.options.speed * t * 1.1);
+                            })(t)
+                        }
+                    });
+                })(i);
+            }
         }
     }
 
