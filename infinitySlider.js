@@ -38,12 +38,11 @@
      * slider default options
      */
     Slider.prototype.options = {
-        dot: true, // slider dot navigation
+        dot: true, // slider boolean
         arrow: true, // slider arrow
         loop: true, // slider loop
         touch: true, // slide with touch - mobile
         width: 1, // the slide size depend of slider width - 1/1 | 0.5/1 etc..
-        margin: 0, // the margin between the slide in %
         loop_speed: 2000, // the time of setInterval
         speed: 500, // the time of container transition
         direction: 'rtl', // direction of the page
@@ -261,7 +260,7 @@
             if(direction == 'left'){
                 m = 0;
             }else if(direction == 'right'){
-                m = 2
+                m = 2;
             }
 
             var sign = options.direction == 'rtl' ? 1 : -1;
