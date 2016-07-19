@@ -6,7 +6,7 @@
            body {display: table;}
            .testSlider {display: table-cell; vertical-align: middle; text-align: center;}
            .theSlider {width: 100%; height: 100%; background: #efefef; margin: 0 auto;}
-           .thisSlide {width: 30%; height: 100%; background: brown;border: 2px solid black; box-sizing: border-box;}
+           .thisSlide {width: 100%;margin: 0 auto; height: 100%; background: brown;border: 2px solid black; box-sizing: border-box;}
            .thisSlide span {font-size: 30px;color: white;}
        </style>
        <link rel="stylesheet" href="infinitySlider.css">
@@ -14,20 +14,30 @@
     <body>
         <div class="testSlider">
             <div class="theSlider" id="slider">
-                <div class="thisSlide">
-                    <span>1</span>
+                <div>
+                    <div class="thisSlide">
+                        <span>1</span>
+                    </div>
                 </div>
-                <div class="thisSlide">
-                    <span>2</span>
+                <div>
+                    <div class="thisSlide">
+                        <span>2</span>
+                    </div>
                 </div>
-                <div class="thisSlide">
-                    <span>3</span>
+                <div>
+                    <div class="thisSlide">
+                        <span>3</span>
+                    </div>
                 </div>
-                <div class="thisSlide">
-                    <span>4</span>
+                <div>
+                    <div class="thisSlide">
+                        <span>4</span>
+                    </div>
                 </div>
-                <div class="thisSlide">
-                    <span>5</span>
+                <div>
+                    <div class="thisSlide">
+                        <span>5</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -40,7 +50,7 @@
               arrow: true,
               dot: true,
               speed: 1000,
-              width: 0.5,
+              width: 1,
               loop_speed: 2000
           });
       </script>
