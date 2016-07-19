@@ -406,8 +406,7 @@
     }
 
     /**
-     * touch event - for switch slide
-     * ## this is for mobile but there is desktop browser supported ##   
+     * touch event - for switch slide 
      */
     Slider.prototype.touch = function(){
         var self = this;
@@ -420,8 +419,8 @@
             var start = function(event){
                 event.preventDefault();
 
-                pos.x = event.pageX;
-                pos.y = event.pageY;
+                var x = event.pageX || event.targetTouches[0].pageX;
+                var y = event.pageY || event.targetTouches[0].pageY;
 
                 if(self.options.loop){
                     clearInterval(self.interval);
@@ -434,8 +433,8 @@
             var touchmove = function(event){
                 event.preventDefault();
 
-                var x = event.pageX;
-                var y = event.pageY;
+                var x = event.pageX || event.targetTouches[0].pageX;
+                var y = event.pageY || event.targetTouches[0].pageY;
 
                 dir.x = x > pos.x ? 'right' : 'left';
                 dir.y = y > pos.y ? 'up' : 'down';
@@ -443,9 +442,11 @@
                 var m = (x - pos.x) * 100 / containerWidth;
 
                 var sign = self.options.direction == 'rtl' ? 1 : -1;
-                self.container_transform('translate3d(' + (m + (sign * self.slideWidth)) + '%, 0, 0)');
+                var t = sign * (m + self.slideWidth);
+                // self.container_transform('translate3d(' + (m + (sign * self.slideWidth)) + '%, 0, 0)');
+                self.container_transform('translate3d(' + t + '%, 0, 0)');
             }
-
+            
             var touchend = function(event){
                 event.preventDefault();
 
@@ -463,9 +464,15 @@
                 dir.y = null;
             }
 
+            // for mobile
             this.container.addEventListener('touchstart', start);
             this.container.addEventListener('touchmove', touchmove);
             this.container.addEventListener('touchend', touchend);
+            
+            // for desktop
+            this.container.addEventListener('onmousedown', start);
+            this.container.addEventListener('onmousedown', touchmove);
+            this.container.addEventListener('onmouseup', touchend);
         }
     }
 
