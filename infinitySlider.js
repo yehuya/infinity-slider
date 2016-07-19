@@ -167,9 +167,8 @@
     /**
      * set slider speed
      * - set transition on the container with options.speed param
-     * @param Boolean ('true' to remove container transition)
      */
-    Slider.prototype.speed = function(){
+    Slider.prototype.speed = function(speed){
        for(var i = 0 ; i < transition.length ; i++){
            this.container.style[transition[i]] = this.options.speed + 'ms';
        }
@@ -222,8 +221,9 @@
      * set slider movement
      * direction left / right
      * @param String (direction of movement)
+     * @param Number (for new speed (no from this.options speed) - for dot fn)
      */
-    Slider.prototype.move = function(direction){
+    Slider.prototype.move = function(direction, newSpeed){
         var options = this.options;
         var slideLength = this.slides.length - 1;
         var self = this;
@@ -245,8 +245,13 @@
                 this.current = 0;
             }            
 
-            // the movement
-            this.speed();
+            // the movement 
+            var timeOut = options.speed;
+            if(newSpeed != undefined){
+                timeOut = newSpeed;
+            }else{
+                this.speed();
+            }
 
             var m;
             if(direction == 'left'){
@@ -283,7 +288,7 @@
                 }
 
                 self.infinity_timeout = true;
-            }, options.speed);
+            }, timeOut);
         }
     }
 
@@ -374,6 +379,7 @@
                             dir = 'right';
                         }
 
+                        var speed = self.options.speed / to;
                         for(var t = 0 ; t < to ; t++){
                             (function(t){
                                 setTimeout(function(){
@@ -382,8 +388,12 @@
                                         self.interval = true;
                                     }
 
-                                    self.move(dir);
-                                }, self.options.speed * t * 1.1);
+                                    for(var i = 0 ; i < transition.length ; i++){
+                                        self.container.style[transition[i]] = speed + 'ms';
+                                    }
+
+                                    self.move(dir, speed);
+                                }, speed * t * 1.1);
                             })(t)
                         }
                     });
