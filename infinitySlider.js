@@ -38,13 +38,15 @@
      * slider default options
      */
     Slider.prototype.options = {
-        dot: true,
-        arrow: true,
-        loop: true,
-        touch: true,
+        dot: true, // slider dot navigation
+        arrow: true, // slider arrow
+        loop: true, // slider loop
+        touch: true, // slide with touch - mobile
+        width: 1, // the slide size depend of slider width - 1/1 | 0.5/1 etc..
+        margin: 0, // the margin between the slide in %
         loop_speed: 2000, // the time of setInterval
         speed: 500, // the time of container transition
-        direction: 'rtl',
+        direction: 'rtl', // direction of the page
         classes: {
             root: 'infinity-slider',
             slides: 'infinity-slider-slide',
@@ -66,6 +68,7 @@
 
     /**
      * current slide in the view
+     * start point
      */
     Slider.prototype.current = 1;
 
@@ -148,12 +151,13 @@
     Slider.prototype.width = function(){
         var length = this.slides.length;
         var width = 100 / length;
+        var slideWidth = this.options.width;
         var childern = this.slides;
         this.container.style.width = 100 * length + '%';
 
         for(var i = 0 ; i < length ; i++){
             var slide = childern[i];
-            slide.style.width = width + '%';
+            slide.style.width = width * slideWidth + '%';
         }
 
         this.slideWidth = width;
