@@ -423,8 +423,8 @@
                 event.preventDefault();
 
                 if(self.infinity_timeout){
-                    pos.x = event.pageX || event.targetTouches[0].pageX;
-                    pos.y = event.pageY || event.targetTouches[0].pageY;
+                    pos.x = event.pageX;
+                    pos.y = event.pageY;
                     self.container.style.cssText += '-moz-grabbing; cursor: -webkit-grabbing; cursor:grabbing';
                 }
 
@@ -441,8 +441,8 @@
                 event.preventDefault();
 
                 if(self.infinity_timeout && pos.x != null){
-                    var x = event.pageX || event.targetTouches[0].pageX;
-                    var y = event.pageY || event.targetTouches[0].pageY;
+                    var x = event.pageX;
+                    var y = event.pageY;
 
                     dir.x = x > pos.x ? 'right' : 'left';
                     dir.y = y > pos.y ? 'up' : 'down';
