@@ -412,6 +412,7 @@
         var self = this;
         if(self.options.touch){
             var width = parseInt(this.element.style.width);
+            var direction = self.options.direction;
             var containerWidth = parseInt(self.container.style.width);
             var pos = {x: null, y: null}
             var dir = {x: null, y: null}
@@ -447,9 +448,12 @@
                     dir.y = y > pos.y ? 'up' : 'down';
 
                     var m = (x - pos.x) * 5 / containerWidth;
-
-                    // var sign = self.options.direction == 'rtl' ? 1 : -1;
                     var t = m - self.slideWidth;
+
+                    if(direction == 'rtl'){
+                        t = m + self.slideWidth;
+                    }
+
                     self.container_transform('translate3d(' + t + '%, 0, 0)');
                 }
             }
@@ -457,12 +461,14 @@
             // the touch end or user the mouse button
             var touchend = function(event){
                 event.preventDefault();
-            
+
                 if(dir.x != null){
                     if(dir.x == 'right'){
-                        self.move('left');
+                        var dirLang = direction == 'rtl' ? 'right' : 'left';
+                        self.move(dirLang);
                     }else if(dir.x == 'left'){
-                        self.move('right');
+                        var dirLang = direction == 'rtl' ? 'left' : 'right';
+                        self.move(dirLang);
                     }
                 }
 
