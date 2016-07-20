@@ -42,10 +42,10 @@
         arrow: true, // slider arrow
         loop: true, // slider loop
         touch: true, // slide with touch - mobile
-        width: 1, // the slide size depend of slider width - 1/1 | 0.5/1 etc..
         loop_speed: 2000, // the time of setInterval
         speed: 500, // the time of container transition
         direction: 'rtl', // direction of the page
+        width: 1,
         classes: {
             root: 'infinity-slider',
             slides: 'infinity-slider-slide',
@@ -164,7 +164,10 @@
         // set the container position to second slide
         // for infinity 
         var sign = this.options.direction == 'rtl' ? 1 : -1;
-        this.container_transform('translate3d(' + sign * this.slideWidth * 1 + '%, 0, 0)');
+        var basic = (sign * this.slideWidth * 1); // one slide in the view
+        var some = (sign * this.slideWidth * 1) - 1/this.slideWidth;
+        var m = this.options.width < 1 ? some : basic;
+        this.container_transform('translate3d(' + m + '%, 0, 0)');
     }
 
     /**
@@ -207,7 +210,10 @@
         }
 
         var sign = this.options.direction == 'rtl' ? 1 : -1;
-        this.container_transform('translate3d(' + sign * this.slideWidth * 1 + '%, 0, 0)');
+        var basic = sign * this.slideWidth * 1;
+        var some = sign * this.slideWidth * 1 + 1/this.slideWidth;
+        var m = this.options.width < 1 ? some : basic;
+        this.container_transform('translate3d(' + m + '%, 0, 0)');
         
         // add class "active" to the view slide
         var cleanSlidesAfter = this.clean(container);
@@ -260,7 +266,7 @@
             if(direction == 'left'){
                 m = 0;
             }else if(direction == 'right'){
-                m = 2;
+                m = 2-0.5;
             }
 
             var sign = options.direction == 'rtl' ? 1 : -1;
