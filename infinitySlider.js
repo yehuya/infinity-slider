@@ -416,12 +416,16 @@
             var pos = {x: null, y: null}
             var dir = {x: null, y: null}
 
+            // touch start
+            // click on the slider
             var start = function(event){
                 event.preventDefault();
-                console.log('start');
 
-                var x = event.pageX || event.targetTouches[0].pageX;
-                var y = event.pageY || event.targetTouches[0].pageY;
+                if(self.infinity_timeout){
+                    pos.x = event.pageX || event.targetTouches[0].pageX;
+                    pos.y = event.pageY || event.targetTouches[0].pageY;
+                    self.container.style.cssText += '-moz-grabbing; cursor: -webkit-grabbing; cursor:grabbing';
+                }
 
                 if(self.options.loop){
                     clearInterval(self.interval);
@@ -431,28 +435,29 @@
                 return pos;
             }
 
+            // when user keep touching or keep pressing on the mouse button
             var touchmove = function(event){
                 event.preventDefault();
-                console.log('move');
 
-                var x = event.pageX || event.targetTouches[0].pageX;
-                var y = event.pageY || event.targetTouches[0].pageY;
+                if(self.infinity_timeout && pos.x != null){
+                    var x = event.pageX || event.targetTouches[0].pageX;
+                    var y = event.pageY || event.targetTouches[0].pageY;
 
-                dir.x = x > pos.x ? 'right' : 'left';
-                dir.y = y > pos.y ? 'up' : 'down';
+                    dir.x = x > pos.x ? 'right' : 'left';
+                    dir.y = y > pos.y ? 'up' : 'down';
 
-                var m = (x - pos.x) * 100 / containerWidth;
+                    var m = (x - pos.x) * 5 / containerWidth;
 
-                var sign = self.options.direction == 'rtl' ? 1 : -1;
-                var t = sign * (m + self.slideWidth);
-                // self.container_transform('translate3d(' + (m + (sign * self.slideWidth)) + '%, 0, 0)');
-                self.container_transform('translate3d(' + t + '%, 0, 0)');
+                    // var sign = self.options.direction == 'rtl' ? 1 : -1;
+                    var t = m - self.slideWidth;
+                    self.container_transform('translate3d(' + t + '%, 0, 0)');
+                }
             }
             
+            // the touch end or user the mouse button
             var touchend = function(event){
                 event.preventDefault();
-                console.log('end');
-
+            
                 if(dir.x != null){
                     if(dir.x == 'right'){
                         self.move('left');
@@ -460,6 +465,8 @@
                         self.move('right');
                     }
                 }
+
+                self.container.style.cursor = 'default';
 
                 pos.x = null;
                 pos.y = null;
@@ -473,9 +480,21 @@
             this.container.addEventListener('touchend', touchend);
             
             // for desktop
-            this.container.addEventListener('mousedown', start);
-            this.container.addEventListener('mousedown', touchmove);
-            this.container.addEventListener('mouseup', touchend);
+            this.container.addEventListener('mousedown', function(event){
+                start(event);
+                this.addEventListener('mousemove', touchmove);
+            });
+            
+            this.container.addEventListener('mouseup', function(event){
+                touchend(event);
+                this.removeEventListener('mousemove', touchmove);
+            });
+
+            // when user mouse leave the slider container when he keep pressing
+            this.container.addEventListener('mouseleave', function(event){
+                touchend(event);
+                this.removeEventListener('mousemove', touchmove);
+            });
         }
     }
 
