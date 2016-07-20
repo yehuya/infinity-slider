@@ -264,9 +264,9 @@
 
             var m;
             if(direction == 'left'){
-                m = 0;
+                m = this.options.width < 1 ? 0 - this.options.width : 0;
             }else if(direction == 'right'){
-                m = 2-0.5;
+                m = this.options.width < 1 ? 2 - this.options.width : 2;
             }
 
             var sign = options.direction == 'rtl' ? 1 : -1;
