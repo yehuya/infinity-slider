@@ -418,6 +418,7 @@
 
             var start = function(event){
                 event.preventDefault();
+                console.log('start');
 
                 var x = event.pageX || event.targetTouches[0].pageX;
                 var y = event.pageY || event.targetTouches[0].pageY;
@@ -432,6 +433,7 @@
 
             var touchmove = function(event){
                 event.preventDefault();
+                console.log('move');
 
                 var x = event.pageX || event.targetTouches[0].pageX;
                 var y = event.pageY || event.targetTouches[0].pageY;
@@ -449,6 +451,7 @@
             
             var touchend = function(event){
                 event.preventDefault();
+                console.log('end');
 
                 if(dir.x != null){
                     if(dir.x == 'right'){
@@ -470,9 +473,9 @@
             this.container.addEventListener('touchend', touchend);
             
             // for desktop
-            this.container.addEventListener('onmousedown', start);
-            this.container.addEventListener('onmousedown', touchmove);
-            this.container.addEventListener('onmouseup', touchend);
+            this.container.addEventListener('mousedown', start);
+            this.container.addEventListener('mousedown', touchmove);
+            this.container.addEventListener('mouseup', touchend);
         }
     }
 
