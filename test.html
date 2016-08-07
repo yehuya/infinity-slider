@@ -6,10 +6,10 @@
            body {display: table;}
            .testSlider {display: table-cell; vertical-align: middle; text-align: center;}
            .theSlider {width: 100%; height: 100%; background: #efefef; margin: 0 auto;}
-           .thisSlide {width: 90%;margin: 0 auto; height: 100%; background: #dd3629;border: 2px solid black; box-sizing: border-box;}
+           .thisSlide {width: 100%;margin: 0 auto; height: 100%; background: #dd3629;border: 2px solid black; box-sizing: border-box;}
            .thisSlide span {font-size: 30px;color: white;}
        </style>
-       <link rel="stylesheet" href="infinitySlider.css">
+       <link rel="stylesheet" href="dist/infinitySlider.min.css">
     </head>
     <body>
         <div class="testSlider">
@@ -41,7 +41,7 @@
                 </div>
             </div>
         </div>
-       <script src="infinitySlider.js"></script>
+       <script src="dist/infinitySlider.min.js"></script>
       <script>
           var go = document.getElementById('slider');
           go.Slider({
@@ -51,7 +51,7 @@
               dot: true,
               touch: true,
               speed: 1000,
-              width: .5,
+              width: 1,
               loop_speed: 2000
           });
       </script>
