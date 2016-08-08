@@ -11,6 +11,12 @@
      */
     Object.prototype.Slider = function(options){
         var elem = this;
+
+        // if JQUERY selector
+        if(this.selector){
+            elem = document.querySelector(this.selector);
+        }
+
         new Slider(options, elem);
     }
 
