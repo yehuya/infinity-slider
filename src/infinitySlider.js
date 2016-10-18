@@ -9,7 +9,7 @@
     /**
      * binding dom element with slider
      */
-    Object.prototype.Slider = function(options){
+    Element.prototype.Slider = function(options){
         var elem = this;
 
         // if JQUERY selector
@@ -435,8 +435,9 @@
                 event.preventDefault();
 
                 if(self.infinity_timeout){
-                    pos.x = event.pageX;
-                    pos.y = event.pageY;
+                    pos.x = event.pageX || event.touches[0].pageX;
+                    pos.y = event.pageY || event.touches[0].pageY;
+  
                     self.container.style.cssText += '-moz-grabbing; cursor: -webkit-grabbing; cursor:grabbing';
                 }
 
@@ -451,10 +452,10 @@
             // when user keep touching or keep pressing on the mouse button
             var touchmove = function(event){
                 event.preventDefault();
-
+  
                 if(self.infinity_timeout && pos.x != null){
-                    var x = event.pageX;
-                    var y = event.pageY;
+                    var x = event.pageX || event.touches[0].pageX;
+                    var y = event.pageY || event.touches[0].pageY;
 
                     dir.x = x > pos.x ? 'right' : 'left';
                     dir.y = y > pos.y ? 'up' : 'down';
@@ -491,7 +492,7 @@
                 dir.x = null;
                 dir.y = null;
             }
-
+            
             // for mobile
             this.container.addEventListener('touchstart', start);
             this.container.addEventListener('touchmove', touchmove);
