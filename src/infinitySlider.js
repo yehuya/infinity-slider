@@ -432,7 +432,7 @@
             // touch start
             // click on the slider
             var start = function(event){
-                event.preventDefault();
+                // event.preventDefault();
 
                 if(self.infinity_timeout){
                     pos.x = event.pageX || event.touches[0].pageX;
@@ -451,7 +451,7 @@
 
             // when user keep touching or keep pressing on the mouse button
             var touchmove = function(event){
-                event.preventDefault();
+                // event.preventDefault();
   
                 if(self.infinity_timeout && pos.x != null){
                     var x = event.pageX || event.touches[0].pageX;
@@ -473,7 +473,7 @@
             
             // the touch end or user the mouse button
             var touchend = function(event){
-                event.preventDefault();
+                // event.preventDefault();
 
                 if(dir.x != null){
                     if(dir.x == 'right'){
